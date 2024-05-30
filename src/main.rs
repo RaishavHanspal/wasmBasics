@@ -1,52 +1,46 @@
 use bevy::prelude::*;
+#[derive(Component)]
+struct Movable;
+
+const SYM_HEIGHT: f32 = 500.;
+const SYM_COUNT: f32 = 3.;
 fn main() {
-    println!("Hello, world!");
     App::new()
-    .add_plugins(DefaultPlugins)
-    .add_systems(Startup, (add_hero, show_sprite))
-    .add_systems(Update, (yoyo, (update_hero, greet_people).chain()))
-    .run();
+        .add_plugins(DefaultPlugins)
+        .add_systems(Startup, init)
+        .add_systems(Update, tick)
+        .run();
 }
 
-fn yoyo() {
-    println!("yoyoyo");
-}
-
-#[derive(Component)]
-struct SuperHero;
-
-#[derive(Component)]
-struct Name(String);
-
-fn add_hero(mut commands: Commands) {
-    commands.spawn((SuperHero, Name("Bat Man".to_string())));    
-    commands.spawn((SuperHero, Name("Super Man".to_string())));    
-    commands.spawn((SuperHero, Name("ShaktiMaan".to_string())));    
-}
-
-fn greet_people(query: Query<&Name, With<SuperHero>>) {
-    for name in &query {
-        println!("Yo {}!", name.0);
-    }
-}
-
-fn update_hero(mut query: Query<&mut Name, With<SuperHero>>) {
-    for mut name in &mut query {
-        if name.0 == "ShaktiMaan" {
-            name.0 = "GangaDhar".to_string();
-            break; // We don’t need to change any other names
-        }
-        else if name.0 == "Super Man" {
-            name.0 = "Clark Kent".to_string();
-            break;
-        }
-    }
+fn init(commands: Commands, asset_server: Res<AssetServer>) {
+    show_sprite(commands, asset_server)
 }
 
 fn show_sprite(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(Camera2dBundle::default());
     commands.spawn(SpriteBundle {
-        texture: asset_server.load("../assets/abc.png"),
+        texture: asset_server.load("../assets/scorpion.png"),
         ..default()
     });
+    let mut i: f32 = 0.;
+    while i < SYM_COUNT {
+        i += 1.;
+        let sprite_path = format!("../assets/{}.png", i);
+        println!("{sprite_path}");
+        commands.spawn((SpriteBundle {
+            transform: Transform::from_xyz(0., SYM_HEIGHT * (i - SYM_COUNT + 1.), 0.), //-500, 0, 500
+            texture: asset_server.load(sprite_path),
+            ..default()
+        }, Movable
+    ));
+    }
+}
+
+fn tick(time: Res<Time>, mut sprite_position: Query<(&Movable, &mut Transform)>) {
+    for ( _, mut transform) in &mut sprite_position {
+        transform.translation.y -= SYM_HEIGHT * time.delta_seconds();
+        if transform.translation.y < -1.5 * SYM_HEIGHT {
+            transform.translation.y += SYM_HEIGHT * SYM_COUNT;
+        }
+    }
 }
