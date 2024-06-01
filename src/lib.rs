@@ -1,13 +1,13 @@
 use wasm_bindgen::prelude::*;
 mod game;
 #[wasm_bindgen]
-extern "C" {
+extern {
     fn alert(s: &str);
 }
 
 #[wasm_bindgen]
 pub fn greet() {
-    alert("yoyo");
+    alert("hello world");
 }
 
 #[wasm_bindgen]
