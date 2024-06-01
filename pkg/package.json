@@ -1,0 +1,16 @@
+{
+  "name": "wasm_basics",
+  "version": "0.1.0",
+  "files": [
+    "wasm_basics_bg.wasm",
+    "wasm_basics.js",
+    "wasm_basics_bg.js",
+    "wasm_basics.d.ts"
+  ],
+  "module": "wasm_basics.js",
+  "types": "wasm_basics.d.ts",
+  "sideEffects": [
+    "./wasm_basics.js",
+    "./snippets/*"
+  ]
+}
