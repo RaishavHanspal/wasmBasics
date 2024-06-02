@@ -3,7 +3,8 @@ use bevy::prelude::*;
 struct Movable;
 
 const SYM_HEIGHT: f32 = 122.;
-const SYM_COUNT: f32 = 5.;
+const SYM_COUNT: f32 = 8.;
+const SPEED: f32 = 8.;
 pub fn start() {
     App::new()
         .add_plugins(DefaultPlugins)
@@ -40,7 +41,7 @@ fn show_sprite(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 fn tick(time: Res<Time>, mut sprite_position: Query<(&Movable, &mut Transform)>) {
     for (_, mut transform) in &mut sprite_position {
-        transform.translation.y -= SYM_HEIGHT * time.delta_seconds();
+        transform.translation.y -= SYM_HEIGHT * time.delta_seconds() * SPEED;
         if transform.translation.y < -1. * (SYM_COUNT / 2.) * SYM_HEIGHT {
             transform.translation.y += SYM_HEIGHT * SYM_COUNT;
         }
