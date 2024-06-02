@@ -24,7 +24,7 @@ opt-level = 3
 
 [dependencies]
 bevy = "0.13.2"
-iyes_perf_ui = "0.2.3"
+bevy-fps-counter = "0.4.0"
 wasm-bindgen = "0.2.92"
 
 [dependencies.web-sys]

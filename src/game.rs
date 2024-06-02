@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_fps_counter::{FpsCounter, FpsCounterPlugin};
 #[derive(Component)]
 struct Movable;
 
@@ -8,6 +9,7 @@ const SPEED: f32 = 8.;
 pub fn start() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugins(FpsCounterPlugin)
         .add_systems(Startup, init)
         .add_systems(Update, tick)
         .run();
