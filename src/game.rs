@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use iyes_perf_ui::prelude::*;
 #[derive(Component)]
 struct Movable;
 
@@ -8,13 +9,18 @@ const SPEED: f32 = 8.;
 pub fn start() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugins(bevy::diagnostic::FrameTimeDiagnosticsPlugin)
+        .add_plugins(bevy::diagnostic::EntityCountDiagnosticsPlugin)
+        .add_plugins(bevy::diagnostic::SystemInformationDiagnosticsPlugin)
+        .add_plugins(PerfUiPlugin)
         .add_systems(Startup, init)
         .add_systems(Update, tick)
         .run();
 }
 
-fn init(commands: Commands, asset_server: Res<AssetServer>) {
-    show_sprite(commands, asset_server)
+fn init(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn(PerfUiCompleteBundle::default());
+    show_sprite(commands, asset_server);
 }
 
 fn show_sprite(mut commands: Commands, asset_server: Res<AssetServer>) {
